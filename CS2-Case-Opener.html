@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS2 Case Opener — Fan Simulator</title>
+<style>
+:root{--bg:#0b1018;--panel:#121b28;--panel2:#182536;--line:#26384c;--text:#edf4fc;--muted:#9aadc2;--gold:#f0b84b;--blue:#65a9ff;--green:#68d391}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17263a 0,#0b1018 55%);color:var(--text);font:15px/1.45 Arial,Helvetica,sans-serif;min-height:100vh}
+button{cursor:pointer;border:0;border-radius:8px;padding:11px 15px;font-weight:700;color:#08111b;background:var(--gold);transition:transform .12s,filter .12s}button:hover{filter:brightness(1.08);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+button.secondary{background:#25384d;color:var(--text);border:1px solid #3a5069}button.danger{background:#612b36;color:#fff}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px clamp(14px,4vw,42px);border-bottom:1px solid #26384c;background:#0b111bdc;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.logo{font-weight:900;letter-spacing:1.5px}.logo span{color:var(--gold)}.wallet{font-weight:800;background:#1a2a3c;border:1px solid #31465c;padding:9px 13px;border-radius:9px;white-space:nowrap}.wallet b{color:var(--gold)}
+main{max-width:1150px;margin:auto;padding:26px 16px 60px}.hero{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:22px}.eyebrow{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}h1{font-size:clamp(26px,4vw,40px);margin:6px 0}p{color:var(--muted);margin:6px 0}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{background:#172333;color:#bacadd;border:1px solid #30445b}.tab.active{background:var(--gold);color:#111a25;border-color:var(--gold)}
+.page{display:none}.page.active{display:block}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr);gap:18px}.panel{background:linear-gradient(145deg,#142031,#101823);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}.panel h2{margin:0 0 12px;font-size:18px}.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.case{border:1px solid #2b3e54;border-radius:12px;background:#111c2a;padding:13px;text-align:center}.case-art{height:104px;display:grid;place-items:center;background:linear-gradient(140deg,#23374e,#111a27);border-radius:8px;margin-bottom:10px;font-size:52px}.case h3{font-size:15px;margin:5px 0}.case small{color:var(--muted)}.case button{width:100%;margin-top:12px}.case .price{color:var(--gold);font-weight:800;margin-top:6px}
+.roulette-wrap{margin-top:16px}.roulette{position:relative;overflow:hidden;border:1px solid #3b5068;border-radius:12px;background:#0a111b;padding:12px}.pointer{position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--gold);z-index:2;box-shadow:0 0 14px #f0b84b}.pointer:before{content:"▼";position:absolute;top:0;left:50%;transform:translateX(-50%);color:var(--gold);font-size:18px}.reel{display:flex;gap:8px;transform:translateX(0);will-change:transform}.reel-item{flex:0 0 118px;height:110px;border:1px solid #34475c;border-bottom:4px solid var(--rarity);border-radius:8px;background:linear-gradient(160deg,#1a2a3d,#0f1722);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}.reel-item .weapon{font-size:31px}.reel-item b{font-size:11px;margin-top:5px}.reel-item small{color:var(--muted);font-size:10px}.result{margin-top:14px;display:none;text-align:center;border:1px solid #34475c;background:#0e1723;padding:15px;border-radius:10px}.result.show{display:block}.result .big{font-size:42px}.result h3{margin:3px}.result .value{color:var(--gold);font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}.stat{background:#101a27;border:1px solid var(--line);border-radius:10px;padding:13px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:20px}.inventory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px}.skin{background:#111b29;border:1px solid #293b50;border-bottom:4px solid var(--rarity);border-radius:10px;padding:13px}.skin-top{display:flex;justify-content:space-between;align-items:center}.skin .weapon{font-size:30px}.skin h3{font-size:14px;margin:8px 0 3px}.skin small{color:var(--muted)}.skin .value{font-weight:800;color:var(--gold);margin-top:9px}.skin .sell-btn{width:100%;margin-top:10px;background:#25384d;color:var(--text);border:1px solid #3a5069;padding:9px}.badge{font-size:10px;font-weight:800;color:var(--rarity);text-transform:uppercase;letter-spacing:.5px}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed #33465a;border-radius:10px}.prob-list{display:grid;gap:10px}.prob{display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:10px;background:#101a27;padding:10px;border-radius:8px}.dot{height:10px;width:10px;border-radius:3px;background:var(--rarity)}.prob small{color:var(--muted)}.footer{color:#72869d;font-size:12px;margin-top:24px;text-align:center}.notice{padding:11px 13px;border:1px solid #3b5068;border-radius:8px;background:#101a27;color:#b7c7d9;font-size:13px;margin:12px 0}
+@media(max-width:760px){header{align-items:flex-start}.hero{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}}@media(max-width:400px){.wallet{font-size:12px}.logo{font-size:13px}.stats{grid-template-columns:1fr}.stats .stat:last-child{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><div class="logo">CS2 <span>CASE OPENER</span></div><div class="wallet">🪙 <b id="coins">1000</b> monedas</div></header>
+<main>
+  <div class="hero"><div><div class="eyebrow">Fan-made • Simulador offline</div><h1>Abre. Colecciona. Repite.</h1><p>Abre cajas virtuales, descubre skins y construye tu inventario.</p></div><button class="secondary" id="dailyBtn">🎁 Recompensa diaria +250</button></div>
+  <div class="tabs"><button class="tab active" data-page="cases">📦 Cajas</button><button class="tab" data-page="inventory">🎒 Inventario</button><button class="tab" data-page="odds">📊 Rarezas y valores</button></div>
+  <section class="page active" id="page-cases">
+    <div class="layout"><div class="panel"><h2>Selecciona una caja</h2><p>Las monedas y los objetos son ficticios y solo se guardan en este navegador.</p><div class="case-grid" id="caseGrid"></div>
+      <div class="roulette-wrap"><h2>Ruleta de apertura</h2><div class="roulette"><div class="pointer"></div><div class="reel" id="reel"><div class="reel-item" style="--rarity:#65a9ff"><span class="weapon">🔫</span><b>Elige una caja</b><small>La ruleta aparecerá aquí</small></div></div></div><div class="result" id="result"></div></div>
+    </div><aside class="panel"><h2>Tu colección</h2><div class="stats"><div class="stat"><small>Skins</small><strong id="skinCount">0</strong></div><div class="stat"><small>Valor total</small><strong id="totalValue">0</strong></div><div class="stat"><small>Cajas abiertas</small><strong id="openedCount">0</strong></div></div><h2>Últimas adquisiciones</h2><div id="recent" class="empty">Todavía no tienes skins. ¡Abre tu primera caja!</div><div class="notice">Consejo: las rarezas más altas son mucho menos frecuentes. Las probabilidades se muestran en la pestaña correspondiente.</div><button class="secondary" id="resetBtn" style="width:100%">Reiniciar progreso</button></aside></div>
+  </section>
+  <section class="page" id="page-inventory"><div class="panel"><h2>Inventario de skins</h2><p>Tu colección se guarda automáticamente en este navegador.</p><div id="inventoryGrid" class="inventory-grid"></div></div></section>
+  <section class="page" id="page-odds"><div class="layout"><div class="panel"><h2>Rarezas y probabilidades</h2><p>Probabilidades orientativas de este simulador ficticio.</p><div id="probList" class="prob-list"></div></div><div class="panel"><h2>Valor de colección</h2><div class="stats"><div class="stat"><small>Objetos únicos</small><strong id="uniqueCount">0</strong></div><div class="stat"><small>Valor total</small><strong id="oddsValue">0</strong></div><div class="stat"><small>Monedas</small><strong id="oddsCoins">1000</strong></div></div><p>Los precios son valores inventados para el juego. No representan precios del mercado de Steam ni se pueden vender o retirar.</p></div></div></section>
+  <div class="footer">Fan-made, no oficial y sin conexión con Valve. No utiliza dinero real ni objetos comerciables.</div>
+</main>
+<script>
+const rarity=[
+ {name:"Mil-Spec",color:"#6495ff",chance:79.92,mult:1},
+ {name:"Restricted",color:"#8847ff",chance:16,mult:2.5},
+ {name:"Classified",color:"#d32ce6",chance:3.2,mult:8},
+ {name:"Covert",color:"#eb4b4b",chance:.8,mult:35},
+ {name:"Extraordinaria",color:"#e4ae39",chance:.08,mult:150}
+];
+const cases=[
+ {id:"starter",name:"Caja de inicio",icon:"📦",price:100,desc:"Para empezar tu colección"},
+ {id:"neon",name:"Caja Neón",icon:"🌌",price:250,desc:"Diseños eléctricos"},
+ {id:"elite",name:"Caja Élite",icon:"💎",price:500,desc:"Más valor, más emoción"}
+];
+const models={
+ "Mil-Spec":[["MP9 | Circuito Azul","🔫",65],["P250 | Niebla","🔫",80],["UMP-45 | Malla","🔫",90],["G3SG1 | Órbita","🎯",110],["Nova | Pulso","🔫",75]],
+ "Restricted":[["FAMAS | Prisma","🔫",240],["MAC-10 | Sobrecarga","🔫",280],["MP7 | Cobalto","🔫",310],["P90 | Vector","🔫",350]],
+ "Classified":[["AK-47 | Eclipse","🔫",900],["M4A1-S | Espectro","🔫",1100],["USP-S | Aguamarina","🔫",850]],
+ "Covert":[["AWP | Dragón Solar","🎯",4200],["AK-47 | Fénix Carmesí","🔫",3800]],
+ "Extraordinaria":[["Cuchillo | Prisma Dorado","🔪",18000],["Guantes | Tormenta","🧤",15000]]
+};
+let state={coins:1000,inventory:[],opened:0,lastDaily:""};
+try{const saved=JSON.parse(localStorage.getItem("cs2caseopener-save"));if(saved&&typeof saved.coins==="number"&&Array.isArray(saved.inventory))state={...state,...saved}}catch(e){}
+let busy=false;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("cs2caseopener-save",JSON.stringify(state))}
+function fmt(n){return Math.round(n).toLocaleString("es-ES")+" ₵"}
+function pickRarity(){let r=Math.random()*100,acc=0;for(const x of rarity){acc+=x.chance;if(r<acc)return x}return rarity[0]}
+function skinFrom(r){const arr=models[r.name],m=arr[Math.floor(Math.random()*arr.length)];return {id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name:m[0],icon:m[1],base:m[2],value:Math.round(m[2]*(Math.random()*.35+.85)),rarity:r.name,color:r.color,date:Date.now()}}
+function renderCases(){$("caseGrid").innerHTML=cases.map(c=>`<article class="case"><div class="case-art">${c.icon}</div><h3>${c.name}</h3><small>${c.desc}</small><div class="price">${fmt(c.price)}</div><button data-open="${c.id}">Abrir caja</button></article>`).join("");$("caseGrid").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openCase(b.dataset.open))}
+function render(){
+ $("coins").textContent=fmt(state.coins).replace(" ₵","");$("skinCount").textContent=state.inventory.length;$("openedCount").textContent=state.opened;
+ const total=state.inventory.reduce((a,s)=>a+s.value,0);$("totalValue").textContent=fmt(total);$("oddsValue").textContent=fmt(total);$("oddsCoins").textContent=fmt(state.coins);$("uniqueCount").textContent=new Set(state.inventory.map(s=>s.name)).size;
+ const recent=state.inventory.slice(-4).reverse();$("recent").className=recent.length?"inventory-grid":"empty";$("recent").innerHTML=recent.length?recent.map(card).join(""):"Todavía no tienes skins. ¡Abre tu primera caja!";
+ $("inventoryGrid").innerHTML=state.inventory.length?state.inventory.slice().reverse().map(card).join(""):'<div class="empty">Tu inventario está vacío. Abre una caja para conseguir tu primera skin.</div>';
+ $("probList").innerHTML=rarity.map(r=>`<div class="prob" style="--rarity:${r.color}"><span class="dot"></span><div><b>${r.name}</b><br><small>Valor estimado variable</small></div><strong>${r.chance}%</strong></div>`).join("");
+ document.querySelectorAll("[data-sell]").forEach(b=>b.onclick=()=>sellSkin(b.dataset.sell));
+}
+function card(s){return `<article class="skin" style="--rarity:${s.color}"><div class="skin-top"><span class="weapon">${s.icon}</span><span class="badge">${s.rarity}</span></div><h3>${s.name}</h3><small>Objeto virtual · no comerciable</small><div class="value">Valor: ${fmt(s.value)}</div><button class="sell-btn" data-sell="${s.id}">Vender por ${fmt(Math.round(s.value*.7))}</button></article>`}
+function sellSkin(id){const i=state.inventory.findIndex(s=>s.id===id);if(i<0)return;const skin=state.inventory[i];const earnings=Math.round(skin.value*.7);state.inventory.splice(i,1);state.coins+=earnings;save();render();if($("result").classList.contains("show")){$("result").className="result";$("result").innerHTML="";} }
+function openCase(id){
+ if(busy)return;const c=cases.find(x=>x.id===id);if(state.coins<c.price){alert("No tienes suficientes monedas. Reclama tu recompensa diaria o prueba otra caja.");return}
+ state.coins-=c.price;busy=true;$("result").className="result";$("result").innerHTML="";
+ const reel=$("reel");const items=[];for(let i=0;i<28;i++){const r=pickRarity(),s=skinFrom(r);items.push(s)}
+ const r=pickRarity(),won=skinFrom(r);items[22]=won;
+ reel.innerHTML=items.map(s=>`<div class="reel-item" style="--rarity:${s.color}"><span class="weapon">${s.icon}</span><b>${s.name}</b><small>${s.rarity}</small></div>`).join("");
+ reel.style.transition="none";reel.style.transform="translateX(0)";reel.offsetHeight;
+ const itemWidth=126,container=$("reel").parentElement.clientWidth;const target=22*itemWidth+59-container/2;
+ reel.style.transition="transform 4.2s cubic-bezier(.08,.78,.12,1)";reel.style.transform=`translateX(-${Math.max(0,target)}px)`;
+ setTimeout(()=>{state.inventory.push(won);state.opened++;busy=false;save();render();$("result").className="result show";$("result").innerHTML=`<div class="big">${won.icon}</div><div class="eyebrow">Has conseguido</div><h3 style="color:${won.color}">${won.name}</h3><p>${won.rarity}</p><div class="value">${fmt(won.value)}</div><p>¡Añadida a tu inventario!</p>`},4400);
+ render();
+}
+$("dailyBtn").onclick=()=>{const today=new Date().toISOString().slice(0,10);if(state.lastDaily===today){alert("Ya has reclamado la recompensa diaria. ¡Vuelve mañana!");return}state.lastDaily=today;state.coins+=250;save();render();alert("¡Has recibido 250 monedas virtuales!")};
+$("resetBtn").onclick=()=>{if(confirm("¿Seguro que quieres borrar todo tu progreso?")){state={coins:1000,inventory:[],opened:0,lastDaily:""};save();render();$("result").className="result";$("reel").innerHTML='<div class="reel-item" style="--rarity:#65a9ff"><span class="weapon">🔫</span><b>Elige una caja</b><small>La ruleta aparecerá aquí</small></div>'}};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t===b));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+b.dataset.page))});
+renderCases();render();
+</script>
+</body></html>
